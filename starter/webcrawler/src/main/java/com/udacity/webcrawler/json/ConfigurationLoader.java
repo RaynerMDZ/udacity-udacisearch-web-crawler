@@ -1,12 +1,19 @@
 package com.udacity.webcrawler.json;
 
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
+import java.io.IOException;
 import java.io.Reader;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 
 /**
  * A static utility class that loads a JSON configuration file.
  */
+
 public final class ConfigurationLoader {
 
   private final Path path;
@@ -23,10 +30,17 @@ public final class ConfigurationLoader {
    *
    * @return the loaded {@link CrawlerConfiguration}.
    */
-  public CrawlerConfiguration load() {
-    // TODO: Fill in this method.
-
-    return new CrawlerConfiguration.Builder().build();
+  public CrawlerConfiguration load() throws IOException {
+    Reader reader = null;
+    try {
+      reader = Files.newBufferedReader(path);
+      return read(reader);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    } finally {
+      assert reader != null;
+      reader.close();
+    }
   }
 
   /**
@@ -40,6 +54,14 @@ public final class ConfigurationLoader {
     Objects.requireNonNull(reader);
     // TODO: Fill in this method
 
-    return new CrawlerConfiguration.Builder().build();
+    ObjectMapper mapper = new ObjectMapper();
+    mapper.disable(JsonParser.Feature.AUTO_CLOSE_SOURCE);
+
+
+    try {
+      return mapper.readValue(reader, CrawlerConfiguration.Builder.class).build();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 }
