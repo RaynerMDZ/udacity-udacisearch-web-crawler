@@ -45,8 +45,8 @@ final class ProfilingMethodInterceptor implements InvocationHandler {
     try {
       ans = method.invoke(this.target, args);
 
-    } catch (InvocationTargetException invocationTargetException) {
-      throw invocationTargetException.getTargetException();
+    } catch (InvocationTargetException | IllegalAccessException e) {
+      throw e.getCause();
 
     } finally {
       if (profiled) {
@@ -58,15 +58,15 @@ final class ProfilingMethodInterceptor implements InvocationHandler {
   }
 
   @Override
-  public boolean equals(Object object){
+    public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
 
-    if (object == this) return true;
-    if (!(object instanceof ProfilingMethodInterceptor methodInterceptor)) return false;
+    ProfilingMethodInterceptor that = (ProfilingMethodInterceptor) o;
 
-    return Objects.equals(this.clock, methodInterceptor.clock)
-            && Objects.equals(this.target, methodInterceptor.target)
-            && Objects.equals(this.state, methodInterceptor.state)
-            && Objects.equals(this.startTime, methodInterceptor.startTime);
-
+    return Objects.equals(clock, that.clock) &&
+            Objects.equals(target, that.target) &&
+            Objects.equals(state, that.state) &&
+            Objects.equals(startTime, that.startTime);
   }
 }
