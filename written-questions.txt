@@ -33,10 +33,10 @@ Q2. Your manager ran your crawler on her old personal computer, using the config
 Q3. Analyze your method profiler through the lens of Aspect Oriented Programming, by answering the following questions:
 
     (a) What cross-cutting concern is being addressed by the com.udacity.webcrawler.profiler.Profiler class?
-    Answer: The cross-cutting concern being addressed by the com.udacity.webcrawler.profiler.Profiler class is the profiling of the web crawler.
+    Answer: The performance measure of the Profiler class is a property of a cross-cutting concern.
 
     (b) What are the join points of the Profiler in the web crawler program?
-    Answer: The join points of the Profiler in the web crawler program are the methods in the SequentialWebCrawler and ParallelWebCrawler classes.
+    Answer: The methods with @Profiled annotation.
 
 Q4. Identify three (3) different design patterns used in this project, and explain which interfaces, classes, and/or
     libraries use or implement those design patterns.
@@ -44,12 +44,16 @@ Q4. Identify three (3) different design patterns used in this project, and expla
     For each pattern, name one thing about the pattern that you LIKED, and one thing you DISLIKED. If you did not like
     anything, you can name two things you disliked.
 
-    Builder pattern: The CrawlerConfiguration, CrawlResult, ParserModule classes and PageParser interface uses the Builder method.
-    I liked that the Builder pattern is easy to understand and use. I disliked that the Builder pattern is not thread-safe.
+    Proxy pattern is used in the ProfilerImpl class. It is useful to control or manage access to the delegate.
+    I do not like the dynamic proxy pattern, because it can be difficult to understand what it does.
 
-    Proxy pattern: The ProfileImpl class uses the Proxy pattern.
-    I liked that the proxy pattern makes it more convenient to work with reflection. I disliked that the proxy pattern is too complicated to implement and understand.
+    Builder pattern is used in the CrawlerConfiguration class. It is useful to construct the state of a to-be-created
+    object, property by property, and then build the project.
+    I do like the builder pattern, because it makes the code more readable.
+    I do not like the builder pattern, because it makes the code more verbose.
 
-    Dependency Injection pattern: The WebCrawlerMain class uses the Dependency Injection pattern with the Guice library.
-    I liked that the Dependency Injection pattern makes it easy to inject dependencies and makes code more modular for testing.
-    I disliked that the Dependency Injection pattern add more complexity and makes the code harder to understand.
+    Dependency Injection pattern is used the WebCrawlerMain class. It is useful when the code need to work with any
+    object, class or interface that the code imports, creates or uses. Here the WebCrawlerMain class, needs to inject
+    the WebCrawler interface and the Profiler interface.
+    I do like the dependency injection pattern, because it makes the code more readable.
+    I do not like the dependency injection pattern, because it takes more time to set up and implement.
